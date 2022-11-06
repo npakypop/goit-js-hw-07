@@ -1,32 +1,30 @@
 import { galleryItems } from './gallery-items.js';
+
 // Change code below this line
 const galleryRef = document.querySelector('.gallery');
 const galleryImg = createGallery(galleryItems);
-galleryRef.addEventListener('click', onGalleryItem);
 
 galleryRef.insertAdjacentHTML('beforeend', galleryImg);
+galleryRef.addEventListener('click', onGalleryItem);
 
+const lightbox = new SimpleLightbox('.gallery a', {
+    captionDelay: 250,
+    enableKeyboard: true,
+});
 
-function onGalleryItem(event) { 
-    event.preventDefault();
-
-    const imgSource = event.target.dataset.source;
-    if (!imgSource) { 
-        return;
-    }
-    // const lightbox = new SimpleLightbox('.gallery gallery__item', {});
-}
 
 function createGallery(items) { 
     return items.map(({ preview, original, description }) => {
-        return `
-        <div class="gallery__item">  
+        return ` 
         <a class="gallery__item" href=${original}>
-        <img class="gallery__image" src=${preview} alt=${description} />
+        <img class="gallery__image" src=${preview} alt=${description} title=${description} />
         </a>
-        </div>
         `;
     }).join('');
 };
+
+function onGalleryItem(event) { 
+    event.preventDefault();
+}
 
 console.log(galleryItems);
