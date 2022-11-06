@@ -4,8 +4,7 @@ const galleryRef = document.querySelector('.gallery');
 const galleryImg = createGallery(galleryItems);
 
 galleryRef.addEventListener('click', onGalleryItem);
-window.addEventListener('keydown', closeModal);
-
+// window.addEventListener('keydown', closeModal);
 galleryRef.insertAdjacentHTML('beforeend', galleryImg);
 
 function onGalleryItem(event) { 
@@ -23,15 +22,21 @@ function onGalleryItem(event) {
     `)
     instance.show();
 
-    const bigImg = document.querySelector('.basicLightbox');
-    bigImg.addEventListener('click', closeModal);
+    document.addEventListener("keydown", function (event) {
+        const key = event.key;
+        if (key === "Escape") {
+            instance.close();
+        }
+    });
+    // const bigImg = document.querySelector('.basicLightbox');
+    // bigImg.addEventListener('click', closeModal);
 }
 
-function closeModal(event){
-    if (event.code === 'Escape' && document.querySelector('.basicLightbox') || event.target.closest('.basicLightbox')) {
-        document.querySelector('.basicLightbox').remove();
-    }
-}
+// function closeModal(event){
+//     if (event.code === 'Escape' && document.querySelector('.basicLightbox') || event.target.closest('.basicLightbox')) {
+//         document.querySelector('.basicLightbox').remove();
+//     }
+// }
 
 function createGallery(items) { 
     return items.map(({ preview, original, description }) => {
@@ -49,6 +54,4 @@ function createGallery(items) {
         `;
     }).join('');
 };
-
-
 
