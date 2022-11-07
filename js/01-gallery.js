@@ -4,50 +4,42 @@ const galleryRef = document.querySelector('.gallery');
 const galleryImg = createGallery(galleryItems);
 
 galleryRef.addEventListener('click', onGalleryItem);
-// window.addEventListener('keydown', closeModal);
 galleryRef.insertAdjacentHTML('beforeend', galleryImg);
 
+
+let instance;
 function onGalleryItem(event) { 
     event.preventDefault();
 
-    const imgSource = event.target.dataset.source;
-    if (!imgSource) { 
+    if (event.target.nodeName !== "IMG") { 
         return;
     }
-
-    const instance = basicLightbox.create(`
-    <div class="modal">
-    <img src=${imgSource} width='1280' height='720'></img>
-    </div>
-    `)
+    
+    const imgSource = event.target.dataset.source;
+    instance = basicLightbox.create(`<div class="modal"><img src="${imgSource}" width='1024' height='720'></div>`)
     instance.show();
 
-    document.addEventListener("keydown", function (event) {
-        const key = event.key;
-        if (key === "Escape") {
-            instance.close();
-        }
-    });
-    // const bigImg = document.querySelector('.basicLightbox');
-    // bigImg.addEventListener('click', closeModal);
+    document.addEventListener("keydown", closeModal);
 }
 
-// function closeModal(event){
-//     if (event.code === 'Escape' && document.querySelector('.basicLightbox') || event.target.closest('.basicLightbox')) {
-//         document.querySelector('.basicLightbox').remove();
-//     }
-// }
+function closeModal(event) {
+    const key = event.key;
+    if (key === "Escape" ) {
+        document.removeEventListener("keydown", closeModal);
+        instance.close();
+    }
+}
 
 function createGallery(items) { 
     return items.map(({ preview, original, description }) => {
         return `
         <div class="gallery__item">  
-        <a class="gallery__link" href="large-image.jpg">
+        <a class="gallery__link" href="${original}">
         <img
         class="gallery__image"
-        src=${preview}
-        data-source=${original}
-        alt=${description}
+        src="${preview}"
+        data-source="${original}"
+        alt="${description}"
         />
         </a>
         </div>
